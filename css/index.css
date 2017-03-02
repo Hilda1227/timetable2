@@ -1,7 +1,8 @@
 * {
   margin: 0px;
   padding: 0px;
-  border: none; }
+  border: none;
+  font-size: 12px; }
 
 html, body {
   width: 100%;
@@ -16,13 +17,14 @@ html, body {
   position: relative;
   float: left;
   display: block;
+  overflow: hidden;
   height: 100%;
   width: 50%; }
 
 .main .header {
   position: relative;
   top: 0px;
-  height: 8%;
+  height: 6%;
   width: 100%;
   border-top: 1px solid #fc9b7f;
   background-color: #f1f5f8; }
@@ -35,25 +37,42 @@ html, body {
 
 .main .table_wrap {
   position: relative;
-  height: 92%;
+  bottom: 0px;
+  height: 94%;
   width: 100%;
   overflow: auto; }
   .main .table_wrap table {
-    height: 140%;
     width: 100%;
-    border-collapse: collapse; }
-    .main .table_wrap table th {
-      height: 8.333%;
-      width: 8.13%;
-      font-weight: normal;
-      color: #adb9bd; }
+    height: auto;
+    text-align: center;
+    z-index: 1;
+    table-layout: fixed;
+    border-collapse: collapse;
+    position: relative; }
     .main .table_wrap table td, .main .table_wrap table th {
       border-collapse: collapse;
-      border: 1px solid #edf9fe; }
+      border: 1px solid #edf9fe;
+      overflow: hidden;
+      table-layout: fixed; }
+    .main .table_wrap table th {
+      font-weight: normal;
+      color: #adb9bd; }
+    .main .table_wrap table td {
+      color: #fff;
+      overflow: hidden; }
 
-
+td p {
+  width: 95%;
+  height: 100%;
+  overflow: hidden;
+  display: inline-block;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  margin-top: 2px;
+  padding-top: 3px; }
 
 .detail {
   background-color: red; }
 
-/*# sourceMappingURL=index.css.map *
+/*# sourceMappingURL=index.css.map */

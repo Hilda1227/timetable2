@@ -2,6 +2,7 @@
 	margin:0px;
 	padding:0px;
 	border:none;
+	font-size:12px;
 }
 
 html,body{
@@ -17,6 +18,7 @@ html,body{
 	position:relative;
 	float:left;
 	display:block;
+	overflow:hidden;
 
 	height:100%;
 	width:50%;
@@ -25,7 +27,7 @@ html,body{
 .main .header{
 	position:relative;
 	top:0px;
-	height:8%;
+	height:6%;
 	width:100%;
 
 	border-top:1px solid #fc9b7f;
@@ -42,24 +44,47 @@ html,body{
 }
 .main .table_wrap{
 	position:relative;
-	height:92%;
+	bottom:0px;
+	height:94%;
 	width:100%;
 	overflow:auto;
 	table{
-		height:140%;
 		width:100%;
+		height:auto;
+		text-align: center;
+        z-index: 1;
+		table-layout: fixed;
 		border-collapse:collapse;
-		th{
-			height:8.333%;
-			width:8.13%;
-			font-weight:normal;
-			color:#adb9bd;
-		}
+		position:relative;
 		td,th{
 			 border-collapse:collapse;
 			 border: 1px solid #edf9fe;
+			 overflow:hidden;
+		     table-layout: fixed;
+		 
+		}
+		th{
+			
+			font-weight:normal;
+			color:#adb9bd;
+		}
+		td{
+		  color:#fff;
+		  overflow:hidden;
 		}
 	}
+}
+td p{
+  width: 95%;
+  height:100%;
+  overflow: hidden;
+  display: inline-block;
+  border-radius: 5px;
+  text-align:center;
+  position:relative;
+  margin-top:2px;
+  padding-top:3px;
+  
 }
 .detail{
 	background-color:red;
