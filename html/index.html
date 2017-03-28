@@ -4,21 +4,39 @@
    <title>一周课表</title>
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+   <link rel="stylesheet" href="./weui.min.css"/>
+   <link rel="stylesheet" href="./example.css"/>
    <link href="../css/index.css" rel="stylesheet" type="text/css"/>
+
+   <script type="text/javascript">  // 根据屏幕宽度设置rem
+	 (function() { var resizeEvent = 'orientationchange' in window ? 'orientationchange' : 'resize'; 
+	 	var rescale = function() { 
+	 		document.documentElement.style.fontSize = document.documentElement.clientWidth/375*75 + 'px'; 	 	
+	 	} 
+	 window.addEventListener(resizeEvent,rescale,false); 
+	 document.addEventListener('DOMContentLoaded',rescale,false); })();
+	</script>
 </head>
 <body>
 	<div class="container">
 		<div class="main">
+
+			<div class="shade"></div>
+			<div class="conflict_panel">
+				<h3>冲突课程</h3>
+				<ol type=I>
+				</ol>
+			</div>
 			<table class="header">
 				<tr>
 					<th></th>
-					<td>周一</td>
-					<td>周二</td>
-					<td>周三</td>
-					<td>周四</td>
-					<td>周五</td>
-					<td>周六</td>
-					<td>周日</td>
+					<td class="a1">周一</td>
+					<td class="a2">周二</td>
+					<td class="a3">周三</td>
+					<td class="a4">周四</td>
+					<td class="a5">周五</td>
+					<td class="a6">周六</td>
+					<td class="a7">周日</td>
 				</tr>
 			</table>
 			<div class="table_wrap">
@@ -145,12 +163,52 @@
 					</tr>				
 				</table>
 			</div>
+			<ul class="button_group">
+				<li><span id="no_arrange">更多课程</span></li>
+				<li><a href="javascript:;" class="weui-btn weui-btn_default" id="showPicker">第<span></span>周<img src="../img/week_button.jpg"></a></li>
+			</ul>
+			<div class="no_arrange">
+				<div class="no_arrange_header"><span>未安排课程</span></div>
+				<ul>
+				</ul>
+			</div>
 		</div>
 		<div class="detail">
-
+			<div class="detail_header">
+				<img src="../img/return.jpg" class="return_btn"></img>
+				<span>课程详情</span>
+			</div>
+			<div class="wrap">
+				<div class="detail_wrap">
+						<p class="class_name"></p>
+						<ul>
+							<li class="classroom"><img src="../img/place.jpg"><span class="info_title">教室</span><span class="class_info"></span></li>
+							<li class="week"><img src="../img/week.jpg"><span class="info_title">周数</span><span class="class_info"></span></li>
+							<li class="section"><img src="../img/section.jpg"><span class="info_title">节数</span><span class="class_info"></span></li>
+							<li class="detail_info time"><img src="../img/time.jpg"><span class="info_title">时间</span><span class="class_info"></span></li>
+							<li class="detail_info teacher"><img src="../img/teacher.jpg"><span class="info_title">老师</span><span class="class_info"></span></li>
+						</ul>					
+				</div>
+				<div class="adj_info">
+					<div class="adj_header"><img src="../img/adj.jpg"><span class="info_title">课程调至</span></div>
+					<ul>						
+						<li class="place"><span class="adj_title">教室</span><span class="adj_result"></span></li>
+						<li class="section"><span class="adj_title">节数</span><span class="adj_result"></span></li>
+						<li class="week"><span class="adj_title">周数</span><span class="adj_result"></span></li>
+						<li class="teacher"><span class="adj_title">老师</span><span class="adj_result"></span>
+						</li>
+					</ul>	
+				</div>
+			</div>
 		</div>
 	</div>
+
+<span class="bit">©比特工场</span>
 </body>
 <script src="../js/jquery-3.1.1.min.js"></script>
+<script src="./zepto.min.js"></script>
+<cript type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+<script src="./example.js"></script>
 <script src="../js/index.js"></script>
 </html>
