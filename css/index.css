@@ -23,11 +23,12 @@ html, body {
 
 .shade {
   position: absolute;
+  top: 0px;
   display: none;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.65);
-  z-index: 9; }
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 20; }
 
 .week_panel {
   position: absolute;
@@ -63,7 +64,7 @@ html, body {
   margin: auto;
   background-color: #fff;
   width: 4rem;
-  z-index: 10;
+  z-index: 21;
   display: none;
   border-radius: 3px; }
   .conflict_panel h3 {
@@ -95,6 +96,7 @@ html, body {
       margin-left: 3px; }
 
 .main {
+  background-image: url(../img/bg.png);
   background-repeat: no-repeat;
   background-size: 100% 100%; }
 
@@ -105,7 +107,6 @@ html, body {
   width: 100%;
   z-index: 2;
   border-collapse: collapse;
-  background-color: #f1f5f8;
   table-layout: fixed; }
   .main .header td {
     height: 100%;
@@ -123,8 +124,7 @@ html, body {
   bottom: 0px;
   height: 94%;
   width: 100%;
-  overflow: auto;
-  z-index: 1; }
+  overflow: auto; }
   .main .table_wrap table {
     width: 100%;
     height: auto;
@@ -162,7 +162,9 @@ td p {
   text-align: center;
   position: absolute;
   opacity: 0.9;
-  padding-top: 6px; }
+  z-index: 1;
+  padding-top: 7px;
+ }
 
 .bushang {
   background-color: #f2f2f2;
@@ -171,34 +173,42 @@ td p {
 .button_group {
   position: absolute;
   width: 100%;
-  background-color: #fff;
+  background-color: #fafafa;
   bottom: 0px;
   display: block;
-  z-index: 8; }
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  z-index: 5; }
   .button_group li {
-    font-size: 0.22rem;
+    background-color: #fff;
+    font-size: 0.2rem;
     text-align: center;
     display: inline-block;
-    color: #666;
-    height: 0.7rem;
-    line-height: 0.7rem;
+    position: relative;
+    color: #333;
+    height: 0.75rem;
+    line-height: 0.6rem;
     list-style: none;
-    margin: 0px;
     width: 50%;
     float: left; }
     .button_group li img {
-      width: 0.3rem;
-      opacity: 0.6;
-      margin-left: 10px; }
+       top: 1px;
+      width: 0.2rem;
+      height: 0.2rem;
+      opacity: 0.8;
+      margin-right: 10px;
+      position: relative; }
   .button_group .weui-btn {
     font-size: 0.22rem;
     border-raidus: 0px;
     background-color: #fff;
+    border: none;
     color: #666;
     height: 100%;
-    line-height: 0.7rem; }
+    line-height: 0.55rem; }
   .button_group .weui-btn:after {
-    border-radius: 0px; }
+    border-radius: 0px;
+    border: none;
+    border-left: 1px solid rgba(0, 0, 0, 0.2); }
 
 .weui-animate-fade-in, .weui-animate-slide-up {
   font-size: 16px;
@@ -211,7 +221,7 @@ td p {
   width: 100%;
   display: block;
   background-color: #fff;
-  z-index: 9; }
+  z-index: 21; }
   .no_arrange .no_arrange_header {
     line-height: 0.8rem;
     height: 0.8rem;
@@ -222,8 +232,8 @@ td p {
   .no_arrange ul {
     padding-bottom: 0.5rem; }
   .no_arrange ul li {
-    line-height: 0.7rem;
-    height: 0.7rem;
+    line-height: 0.8rem;
+    height: 0.8rem;
     font-size: 14px;
     border-bottom: 1px solid #e5e9e8;
     position: relative;
@@ -242,18 +252,20 @@ td p {
 
 .detail {
   position: relative;
-  background-color: #fff; }
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image: url(../img/bg.png); }
 
 .detail_header {
   position: relative;
-  height: 0.893rem;
+  height: 0.8rem;
   text-align: center;
   background-color: #34cdb9; }
   .detail_header .return_btn {
     position: absolute;
     display: block;
-    width: 0.186rem;
-    height: 0.306rem;
+    width: 0.3rem;
+    
     left: 0.34rem;
     top: 0;
     bottom: 0;
@@ -261,7 +273,7 @@ td p {
   .detail_header span {
     position: absolute;
     text-align: center;
-    line-height: 0.893rem;
+    line-height: 0.8rem;
     font-size: 18px;
     color: #fff;
     right: 50%;
@@ -278,20 +290,24 @@ td p {
   text-align: center;
   margin-bottom: 0.25rem; }
 .detail_wrap ul li {
+  position: relative;
   padding-left: 0.34rem;
   font-size: 16px;
   margin-bottom: 0.3rem;
-  width: 100%; }
+  width: 90%; }
   .detail_wrap ul li img {
-    position: relative;
+    position: absolute;
+    display: inline-block;
+    top:50%;
+    transform: translate(0, -0.115rem); 
     width: 0.23rem;
     height: 0.23rem;
-    bottom: 0px; }
+    }
   .detail_wrap ul li .info_title {
     color: #898887;
     font-size: 16px;
     position: relative;
-    margin-left: 0.226rem;
+    margin-left: 0.366rem;
     margin-right: 0.226rem; }
   .detail_wrap ul li .class_info {
     color: #000; }
@@ -299,17 +315,22 @@ td p {
 .adj_info {
   display: none;
   border-top: 1px solid #ccc;
-  padding-top: 0.2rem; }
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  overflow: auto;
+  height:3rem;
+   }
   .adj_info .adj_header {
     padding-left: 0.34rem;
     font-size: 16px;
     margin-bottom: 0.3rem;
-    width: 100%; }
+    width: 90%; }
     .adj_info .adj_header img {
       position: relative;
+     
       width: 0.23rem;
       height: 0.23rem;
-      bottom: 0px; }
+     }
     .adj_info .adj_header .info_title {
       color: #898887;
       font-size: 16px;
@@ -317,10 +338,11 @@ td p {
       margin-left: 0.226rem;
       margin-right: 0.226rem; }
   .adj_info ul li {
+     position: relative;
     padding-left: 0.34rem;
     font-size: 16px;
     margin-bottom: 0.2rem;
-    width: 100%; }
+    width: 90%; }
     .adj_info ul li .adj_title {
       color: #898887;
       font-size: 16px;
@@ -330,34 +352,33 @@ td p {
     .adj_info ul li .adj_result {
       color: #000; }
 
-.has_conflict {
+.has_conflict_p {
   background-image: url(../img/conflict.png);
   background-repeat: no-repeat;
-  background-size: 0.2666rem;
+  background-size: 0.2rem;
   background-position: right top; }
 
 .has_adj {
-  background-image: url(../img/adj.png);
+  background-image: url(../img/adj_icon.png);
   background-repeat: no-repeat;
-  background-size: 0.2666rem;
+  background-size: 0.2rem;
   background-position: center 88%; }
 
 .special_week {
   background-image: url(../img/special_week.png);
   background-repeat: no-repeat;
-  background-size: 0.2666rem;
+  background-size: 0.2rem;
   background-position: left top; }
 
 .bit {
   display: block;
-  width: 100%;
   text-align: center;
-  font-size: 0.14rem;
-  color: #555;
+  width: 1.6rem;
   opacity: 0.6;
-  position: fixed;
+  position: absolute;
+  left: 0px;
+  right:0px;
   margin: auto;
-  bottom: 10px;
-  z-index: 40; }
+  bottom: 0.08rem;
+  z-index: 18; }
 
-/*# sourceMappingURL=index.css.map */

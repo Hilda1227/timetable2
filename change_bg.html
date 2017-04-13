@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>课表背景切换</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+	<style>
+		body{
+			position:relative;
+			background-color: #fff;
+		}
+
+		input[type="file"]{
+			position: relative;
+			display:block;
+			width: 4rem;
+			height:0.7rem;
+			margin: 0 auto;
+			margin-top: 1rem;
+			border: none;
+			font-size: 16px;
+			color: #ccc;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+		}
+		::-ms-browse, [type='file'] {
+		   line-height: 0.7rem;
+		    border:none;
+		    background: #eee;
+		    color: #888;
+		}
+		::-webkit-file-upload-button {
+		    line-height: 0.7rem;
+		    border:none;
+		    background: #eee;
+		    color: #888;
+		}
+		button[type="submit"]{
+			position: relative;
+			display:block;
+			width: 4rem;
+			height:0.7rem;
+			margin: 0.4rem auto;
+			border: none;
+			font-size: 16px;
+			background-color: #3b3;
+			color: #fff;
+			border-radius: 5px;
+		}
+
+	</style>
+<script>
+	(function() { var resizeEvent = 'orientationchange' in window ? 'orientationchange' : 'resize'; 
+	    var rescale = function() { 
+	      document.documentElement.style.fontSize = document.documentElement.clientWidth/375*75 + 'px';     
+	    } 
+	   window.addEventListener(resizeEvent,rescale,false); 
+	   document.addEventListener('DOMContentLoaded',rescale,false); })();
+</script>
+</head>
+<body>
+	<form action="postpic.php"
+	      method="post">
+
+	 	<input type="file" name="bg"/>
+	    <button type="submit">提交</button>
+	</form>
+</body>
+<script src="./js/jquery-3.1.1.min.js"></script>
+<script>
+// 获取url的openid
+function getUrlParam(sParam){
+  var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+}
+
+var openid = getUrlParam('openid');   
+
+	$('body').on('click',function(){
+		alert("aaa");
+		if($("input[type='file']").val()!=null){
+			$.ajax({
+				type: "POST",
+		  		data: 'openid=hahaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+		  		dataType: 'json',
+		  		url: "postpic.php",   	
+				success:function(){
+alert("haha")
+		        }
+		        error:function(){
+		        	
+		        }
+	    	})
+		}else return;
+	})
+</script>
+</html>

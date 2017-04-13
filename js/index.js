@@ -1,7 +1,15 @@
-// 固定格子宽高
+// 根据屏幕宽度设置rem
+(function() { var resizeEvent = 'orientationchange' in window ? 'orientationchange' : 'resize'; 
+    var rescale = function() { 
+      document.documentElement.style.fontSize = document.documentElement.clientWidth/375*75 + 'px';     
+    } 
+   window.addEventListener(resizeEvent,rescale,false); 
+   document.addEventListener('DOMContentLoaded',rescale,false); })();
 
-  $('.table_wrap th,.table_wrap td').css('height','0.85rem');
+// 固定格子宽高
+  $('.table_wrap th,.table_wrap td').css('height','0.74rem');
   $('.detail .wrap').css('height',$(window).height()-$('.detail_header').height()+"px")
+
   var weeks = [{
             label: '第1周',
             value: 1
@@ -67,38 +75,38 @@
             label: '第21周',
             value: 21
         }]
-    
+
+
+ // 获取url的openid
+function getUrlParam(sParam){
+  var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+}
+
+var openid = getUrlParam('openid');   
 
 $.ajax({
 	type: "get",
-    dataType: "json",
-    url: "http://www.stuzone.com/zixunminda/lab_query/src/API/time_table_api_test.php?openid=oULq3uHTyplVHA-DOYr8kFgg5Ndg",
-   	success:function(data){
-      no_arrange(data);
-     /*    var add={
-        teacher:"/////",
-        place:"qqqq",
-        from_section:"5",
-        to_section:"6",
-        from_week:"1",
-        to_week:"16",
-        name:"英语英语英语英语英语英语英[14]"
-      }
-      var add={
-        teacher:"/////",
-        place:"qqqq",
-        from_section:"5",
-        to_section:"6",
-        from_week:"1",
-        to_week:"16",
-        name:"英语英语英语英语英语英语英[14]"
-      }
-      data.data.timetable[0][2]=add;
-      data.data.timetable[2][6]=add;*/
+  dataType: "json",
+  url: "http://www.stuzone.com/zixunminda/lab_query/src/API/time_table_api.php?openid="+openid,   	
+  success:function(data){
+
+        //显示未安排课程
+        no_arrange(data);
+
                     //获取当前周
         var current_week=data.data.current_week;
 
-        $('#showPicker span').html(current_week);  
+        $('#showPicker #week').html(current_week);  
         weeks[current_week-1].label= weeks[current_week-1].label+'(本周)';
       
      		var settle=(function settle(display_week){
@@ -121,20 +129,16 @@ $.ajax({
              add_color($('.table_wrap .hasCourse'),display_week);
 
              //显示冲突课程
-        /*     $('.has_conflict').off("click",displayConflict);*/
-             $('.has_conflict').on("click",displayConflict);
-
-          
+              $('.has_conflict').on("click",displayConflict);
 
              //点击显示详情
-   /*           $('.hasCourse').not($('.has_conflict')).off("click",displayDetails);*/
              $('.hasCourse').not($('.has_conflict')).on("click",displayDetails);
                 
-
      			return settle;
      		})(current_week)
 
         $('#showPicker').on('click', function () {
+          _hmt.push(['_trackEvent', '切换周次', '切换周次']); //百度统计事件转化代码
           weui.picker(weeks, {
             onChange: function (result){ 
                var val = parseInt(result);
@@ -189,7 +193,6 @@ function getTime(course){
             to_time:times[to].end
      }
    }else{
-      console.log(course.special_time)
       return {
             form_time:course.special_time[0],
             to_time:course.special_time[1]
@@ -261,8 +264,9 @@ var bind_adj = function(obj,adj_data){
 function filter_data(td,display_week){
 
   for(var i = 0,len = td.length;i < len;i++){
+     if(td.eq(i).hasClass('hasCourse')){
       var tdCourse=td.eq(i).data('course');
-    
+   
       //如果有多余的课，移除本周不在周数范围内的课
       if(tdCourse.length > 1){
         for(var j = 0;j < tdCourse.length;j++){
@@ -278,8 +282,8 @@ function filter_data(td,display_week){
       //如果有单双周与冲突同时存在 移除本周不上的课
       if(tdCourse.length > 1){
         for(var k = 0;k < tdCourse.length;k++){
-            if(tdCourse[k].from_week < display_week
-                && tdCourse[k].to_week >display_week
+            if(tdCourse[k].from_week <= display_week
+                && tdCourse[k].to_week >=display_week
                 && tdCourse[k].special_week
                 && tdCourse[k].special_week % 2 != display_week % 2){
                   tdCourse.splice(k,1);
@@ -292,6 +296,53 @@ function filter_data(td,display_week){
          td.eq(i).addClass('has_conflict');
      }
 
+     var course = td.eq(i).data('course')[0];  
+     var rowspan = course.to_section - course.from_section + 1;
+     var start = td.eq(i).index();
+     var from_section = course.from_section;
+     for(var l = 1;l <= rowspan - 1;l++){ 
+          var hidden_td = $(".table_wrap td:nth-of-type("+start+")").eq(from_section - 1 + l);
+          if(hidden_td.hasClass('hasCourse')){
+             
+            var courses = td.eq(i).data('course').concat(hidden_td.data('course'));
+            var the_day_courses = courses.filter(function(course){  //过滤出当周要上的课
+              if((!course.adj  //没有调课情况
+                &&course.from_week <= display_week
+                &&course.to_week >= display_week  
+                &&(!course.special_week || course.special_week % 2 == display_week % 2)
+                )
+              ||(
+                  (course.adj       //有调课的情况
+                  &&(course.adj.modified.from_week <= display_week
+                    &&course.adj.modified.to_week >= display_week))
+                ||(course.adj       //有调课的情况
+                  &&(course.from_week <= display_week
+                    &&course.to_week >= display_week)
+                  &&(course.adj.origin.from_week > display_week
+                    ||course.adj.origin.to_week < display_week)
+                  )
+                ))
+               return true;
+            }); 
+            if(the_day_courses.length>=1){
+              var display_course = the_day_courses[0];
+              if($.inArray(display_course,hidden_td.data('course') )!=-1){
+                hidden_td.data('course',the_day_courses);
+                td.eq(i).data('course',null);
+                td.eq(i).removeClass('hasCourse')
+              }
+              else{
+                td.eq(i).data('course',the_day_courses);
+                hidden_td.data('course',null);
+                hidden_td.removeClass('hasCourse')
+              }
+
+            } 
+             break;      
+          }
+ 
+      }
+   }   
   } 
 }
 
@@ -311,29 +362,33 @@ function paint(td,display_week){
           var hidden_td = $(".table_wrap td:nth-of-type("+start+")").eq(from_section - 1 + j);
              
           hidden_td.css('display','none');
-          if(hidden_td.hasClass('hasCourse')){
+          /*if(hidden_td.hasClass('hasCourse')){
              
             td.eq(i).data('course',td.eq(i).data('course').concat(hidden_td.data('course')));  
                     
-          }
+          }*/
       }
       var courses = td.eq(i).data('course');
              //填充课程信息
       td.eq(i).html("<p><span>" + course.name.replace(/\[\d{2}\]/," ") + course.place + "<span></p>");
      
        if(courses.length>1){       //添加冲突标志
-         td.eq(i).children('p').addClass('has_conflict');  
-      }
-      if(courses[0].adj   //添加调课标志
-        &&(
-          (course.adj.origin.from_week <= display_week
-            &&course.adj.origin.to_week >= display_week)
-          ||(course.adj.modified.from_week <= display_week
-            &&course.adj.modified.to_week >= display_week)
-          )
 
-        ){
-         td.eq(i).children('p').addClass('has_adj');
+        td.eq(i).addClass('has_conflict');
+         td.eq(i).children('p').addClass('has_conflict_p');  
+        }
+
+        if(courses[0].adj   //添加调课标志
+          &&(
+            (course.adj.origin.from_week <= display_week
+              &&course.adj.origin.to_week >= display_week)
+            ||(course.adj.modified.from_week <= display_week
+              &&course.adj.modified.to_week >= display_week)
+            )
+
+          ){
+      
+           td.eq(i).children('p').addClass('has_adj');
       }
       if(courses[0].special_week){   //添加单双周标志
          td.eq(i).children('p').addClass('special_week');
@@ -355,40 +410,45 @@ var add_color = (function (){
         for(var i = 0,len = td.length;i < len;i++){
 
             course=td.eq(i).data('course')[0];
+           
 
             if((!course.adj  //没有调课情况
                 &&course.from_week <= display_week
                 &&course.to_week >= display_week  
                 &&(!course.special_week || course.special_week % 2 == display_week % 2)
                 )
-              ||(course.adj       //有调课的情况
-                &&((course.adj.origin.from_week <= display_week
-                    &&course.adj.origin.to_week >= display_week)
-                   &&(course.adj.modified.from_week <= display_week
-                    &&course.adj.modified.to_week >= display_week)
-                  ||((course.adj.origin.from_week > display_week
-                     ||course.adj.origin.to_week < display_week)
-                    &&(course.from_week <= display_week
-                     &&course.to_week >= display_week  
-                     &&(!course.special_week || course.special_week % 2 == display_week % 2))
-                    )
+              ||(
+                  (course.adj       //有调课的情况
+                  &&(course.adj.modified.from_week <= display_week
+                    &&course.adj.modified.to_week >= display_week))
+                ||(course.adj       //有调课的情况
+                  &&(course.from_week <= display_week
+                    &&course.to_week >= display_week)
+                  &&(course.adj.origin.from_week > display_week
+                    ||course.adj.origin.to_week < display_week)
                   )
                 )
+
               )
             {
                 if(typeof(color_info[course.name]) != 'undefined'){      //上的课显示彩色
-
+   
                   td.eq(i).children('p').css('background-color',color_info[course.name]);
+                  
                 } else {
-                
+              
                   td.eq(i).children('p').css('background-color',colors[k]);
                   color_info[course.name] = colors[k++];
-                }
                
+
+                }
+
             } else {                         
                 td.eq(i).children('p').addClass('bushang');  //不上的课显示灰色
               }
-        }      
+        } 
+        color_info = {}; 
+        k=0;    
     };
 
 })();
@@ -408,18 +468,15 @@ function resert(){
 // 冲突课程的点击回调函数
 var displayConflict =  function(event){
     var courses = $(this).data('course');
-/*
+
     if(courses.length<2){
      return
-    }*/
+    }
     var elem = event.currentTarget;
+ 
       $('.shade').fadeIn(100);
       $('.conflict_panel').fadeIn(100);
 
-     
-    /*  if( $('.conflict_panel ol li').length>=courses.length){
-        return
-      }*/
       for(var i = 0;i < courses.length; i++){
          var li = $("<li class='hasCourse'><p><span class='name'></span><span class='place'></span></p></li>");
          li.children('p').children('.name').html(courses[i].name);
@@ -436,6 +493,7 @@ var displayConflict =  function(event){
 
 
 $('.shade').on('click',function(){  // 点击遮罩层，隐藏冲突面板,清空课程信息
+  $('.table_wrap').css('overflow','auto');
   $('.conflict_panel ol').empty()
   $('.shade,.conflict_panel').css('display','none');
   slide($('.no_arrange'),"Y",0,'200ms');
@@ -445,17 +503,22 @@ $('.shade').on('click',function(){  // 点击遮罩层，隐藏冲突面板,清�
 
 // 点击显示详情页
 var displayDetails = function(event){
+  if($(this).is('li')){
+    $('.main .table_wrap').css('overflow','hidden');
+  }
+  
    slide($('.container'),"X",- $(window).width(),'200ms'); //滑至右边详情页
+    
    var info = $(this).data('course')[0];
   
    $('.class_name').html(info.name.replace(/\[\d{2}\]/," "))
-   $('.classroom .class_info').html(info.place);
+   $('.classroom .class_info').html(info.place ? info.place : "待定");
    $('.week .class_info').html(info.from_week ? info.from_week+"-"+info.to_week+"周" : "待定");
-   $('.section .class_info').html("周"+info.day_in_week+"&nbsp;&nbsp;"+info.from_section+"-"+info.to_section+"节");
-   $('.teacher .class_info').html(info.teacher);
-   $('.time .class_info').html(info.from_time+"～"+info.to_time);
+   $('.section .class_info').html(info.from_section ? "周"+info.day_in_week+"&nbsp;&nbsp;"+info.from_section+"-"+info.to_section+"节" :"待定");
+   $('.teacher .class_info').html(info.teacher ? info.teacher : "待定");
+   $('.time .class_info').html(info.from_time ? info.from_time+"～"+info.to_time : "待定");
 
-   if(typeof(info.adj)!='undefined'){
+   if($(this).children('p').is('.has_adj')){
     $('.adj_info').css('display','block');
       var modified = info.adj.modified;
       $('.adj_info .place .adj_result').html(modified.place);
@@ -463,35 +526,24 @@ var displayDetails = function(event){
       $('.adj_info .teacher .adj_result').html(modified.teacher);
       $('.adj_info .week .adj_result').html(modified.from_week+"-"+modified.to_week);
    }
-   if($(this).hasClass('no_arrange')){
-      $('.classroom .class_info').html("待定");
-      $('.section .class_info').html("待定");     
-      $('.time .class_info').html("待定");
-   }
+ 
 }
 
 
 
 $(".return_btn").on('click',function(){  //点击返回
+
   slide($('.container'),"X",0,'200ms');
    $('.adj_info').css('display','none');
 })
 
 
 
-
-$('#chang_week').on('click',function(event){
-    slide($('.week_panel'),"Y",$('.week_panel').height(),'300ms');
-})
-
-
-
-
 $('#no_arrange').on('click',function(event){
+   _hmt.push(['_trackEvent', '更多课程', '查看未安排课程']); //百度统计事件转化代码
   $('.shade').fadeIn(100);
     slide($('.no_arrange'),"Y",-$('.no_arrange').height(),'200ms');
 })
-
 
 
 
@@ -500,12 +552,12 @@ $('.button').on('click',function(){
 })
  
 
-
  // 定义页面元素滑动函数
  var slide = function(elem,dir,distence,speed){ 
     var distence = distence + "px";
       elem.css("transform","translate" + dir + "(" + distence + ")");
-      elem.css("transition",speed);
+      elem.css({"transition":speed});
+  
  }
 
 
