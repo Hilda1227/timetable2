@@ -97,7 +97,7 @@ var openid = getUrlParam('openid');
 $.ajax({
 	type: "get",
   dataType: "json",
-  url: "http://www.stuzone.com/zixunminda/lab_query/src/API/time_table_api.php?openid="+openid,   	
+  url: "http://www.stuzone.com/zixunminda/lab_query/src/API/time_table_api.php?openid=oULq3uBd3aQshq5huxLtll6jS19I"+openid,   	
   success:function(data){
 
         //显示未安排课程
