@@ -18,3 +18,5 @@
 #### 课程详情
 ![](./img/QQ图片20170630183608.png)  
 
+[一周课表预览](https://wechat.stuzone.com/iscuecer/lab_query/web/index.html?openid=oULq3uHTyplVHA-DOYr8kFgg5Ndg)
+由于该项目仅用于移动端，所以请在手机或pc设备模拟器上查看效果
